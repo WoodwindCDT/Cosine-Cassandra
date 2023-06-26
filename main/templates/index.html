@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cassandra DB</title>
+    <style>
+        * {
+            margin: 0 20%;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            transition: all .08s ease-in-out;
+        }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-size: calc(12px + .4vw);
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid black;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Info in Keyspace</h1>
+    {% for table_data in tables_data %}
+    <h2>Table: {{ table_data['table'] }}</h2>
+    <table>
+        <tr>
+            {% for column in table_data['columns'] %}
+                <th>{{ column[0] }}</th>
+            {% endfor %}
+        </tr>
+        {% for row in table_data['data'] %}
+            <tr>
+                {% for column in table_data['columns'] %}
+                    <td>{{ row[column[0]] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+</body>
+</html>
