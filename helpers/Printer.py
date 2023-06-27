@@ -7,7 +7,7 @@ ascii_art = """\033[32m
 /\  ___\/\ \/\ \/\  ___\/\  ___\/\  ___\/\  ___\/\  ___\   
 \ \___  \ \ \_\ \ \ \___\ \ \___\ \  __\\ \___  \ \___  \  
  \/\_____\ \_____\ \_____\ \_____\ \_____\/\_____\/\_____\ 
-  \/_____/\/_____/\/_____/\/_____/\/_____/\/_____/\/_____/                                              
+  \/_____/\/_____/\/_____/\/_____/\/_____/\/_____/\/_____/
 \033[0m
 """
 
@@ -18,9 +18,17 @@ help_text = """
     upsert <text> : Inserts Vector and Text into DB
     query <text> : Gets similar data based on text
     delete <id> : Removes data stored in DB by id
+    web : Start the web application
     exit : Exit the program
 ---------------------------------------------------
 """
+
+def print_tables(tables):
+    # Display the available tables
+    print("Available Tables: | ", end="")
+    for table_name in tables:
+        print(table_name, end=" |")
+    print()
 
 def print_ascii():
     for char in ascii_art:

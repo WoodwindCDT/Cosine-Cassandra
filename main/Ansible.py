@@ -9,9 +9,7 @@ def start_ansible(app, text):
     if (res['status']):
         session = app.session
 
-        # Will add an area to display the tables the user can access for better response
-
-        # Enter the table to look into
+        Printer.print_tables(app.tables)
         table_name = input("Enter the table name to query: ")
 
         # Enter the amount of similarities to expect
@@ -19,11 +17,11 @@ def start_ansible(app, text):
 
         if (num_similarities > 0): 
             # Retrieve all embeddings and corresponding texts from the Cassandra table
-            query = f"SELECT embedding, text FROM hive.{table_name}"
+            query = f"SELECT embedding, text, id FROM {app.keyspace}.{table_name}"
             try:
                 rows = session.execute(query)
             except Exception as e:
-                print(f"Error accessing that Table, most likely does not exist!: {e}")
+                print(f"Error accessing that Table: {e}")
                 exit(0)
             
             # Calculate cosine similarity between input embedding and database
@@ -31,14 +29,14 @@ def start_ansible(app, text):
             for row in rows:
                 db_embedding = row.embedding
                 similarity = cosine_similarity([res['embedding_values']], [db_embedding])[0][0]
-                similarities.append((similarity, row.text))
+                similarities.append((similarity, row.text, row.id))
 
             similarities.sort(reverse=True)
 
             # Display top 5 similar
             print(f"Displaying {num_similarities} Responses:\n")
-            for similarity, text in similarities[:num_similarities]:
-                Printer.type(f"Similarity: {similarity:.4f} | Text: {text}")
+            for similarity, text, id in similarities[:num_similarities]:
+                Printer.type(f"Similarity: {similarity:.4f} | Text: {text} | ID: {id}")
         else:
             print("Please enter a number of similarities greater than 0")
             exit(1)

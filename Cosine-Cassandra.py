@@ -10,6 +10,8 @@ class Cosine_Cassandra:
     def __init__(self):
         self.cluster = None
         self.session = None
+        self.tables = None
+        self.keyspace = None
 
     def connect_to_cassandra(self):
         stop_event = threading.Event()  # Create a threading.Event object
@@ -26,6 +28,15 @@ class Cosine_Cassandra:
     
         # Wait for the waiting thread to finish
         waiting_thread.join()
+    
+    def get_info(self):
+        self.keyspace = input("Enter the KeySpace to use: ")
+        
+        try:
+            self.tables = self.session.cluster.metadata.keyspaces[f'{self.keyspace}'].tables
+        except Exception as e:
+            Printer.error_response(f"Error accessing keyspace: {e}")
+            exit(0)
 
     def shutdown(self):
         if self.session is not None:
@@ -58,6 +69,11 @@ def shell(app):
             _, uid = command.lower().split(' ', 1)
             Printer.type(uid)
             continue
+        if command.lower() == 'web':
+            print('Under Construction')
+            # flask_thread = threading.Thread(target=Philotic.index(app))
+            # flask_thread.start()
+            continue
         if command.lower() == 'exit':
             # Shutdown the connection on exit
             app.shutdown()
@@ -72,6 +88,8 @@ def shell(app):
 if __name__ == '__main__':
     app = Cosine_Cassandra()
     app.connect_to_cassandra()
+    app.get_info()
+
 
     Printer.print_help()
     # Enter shell interface for the user to enter input!

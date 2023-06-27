@@ -10,6 +10,7 @@ def start_hivemind(app, text):
     if (res['status']):
         session = app.session
 
+        Printer.print_tables(app.tables)
         table_name = input("Enter the table name to query: ")
 
         # Generate a unique UUID
@@ -21,11 +22,11 @@ def start_hivemind(app, text):
         # Insert the embedding vector into the Cassandra table
         try:
             session.execute(
-                f"INSERT INTO hive.{table_name} (id, embedding, text) VALUES (%s, %s, %s)",
+                f"INSERT INTO {app.keyspace}.{table_name} (id, embedding, text) VALUES (%s, %s, %s)",
                 (unique_id, res['embedding_values'], res['text'])
             )
             stop_event.set()
             Printer.print_ascii()
         except Exception as e:
-            Printer.error_response(f"Error accessing that Table, most likely does not exist!: {e}")
+            Printer.error_response(f"Error accessing that Table: {e}")
             exit(0)
