@@ -18,7 +18,8 @@ help_text = """
     upsert <text> : Inserts Vector and Text into DB
     query <text> : Gets similar data based on text
     delete <id> : Removes data stored in DB by id
-    web : Start the web application
+    web i : Start the web application
+    web o : Stop the web application
     exit : Exit the program
 ---------------------------------------------------
 """
@@ -33,7 +34,7 @@ def print_tables(tables):
 def print_ascii():
     for char in ascii_art:
         print(char, end='', flush=True)
-        time.sleep(0.008)
+        time.sleep(0.006)
 
 def type(text):
     for char in text:
