@@ -1,12 +1,20 @@
+# system imports
 import os
 import subprocess
 import sys
 import threading
+
+# cassandra helper
 from cassandra.cluster import Cluster
+
+# various imports for main functionality
 import helpers.Printer as Printer
 import main.Ansible as Ansible
 import main.HiveMind as HiveMind
 import main.Philotic as Philotic
+
+# tools import
+import tools.webscraper as webscraper
 
 class Cosine_Cassandra:
     def __init__(self):
@@ -96,6 +104,21 @@ def shell(app):
                     app.web = False
             else: Printer.error_response("Incorrect Parameter! Try i || o")
             continue
+        if command.lower() == 'tools':
+            while True:
+                tools_command = input("tools > ")
+                if tools_command.lower() == 'webscrape':
+                    webscraper.scrape_webpage()
+                    continue
+                if tools_command.lower() == 'exit':
+                    break
+                print("Invalid tools command. Available commands: webscrape, exit")
+            continue
+        output, error = execute_command(command)
+        if output:
+            print(output)
+        if error:
+            Printer.error_response(f"{error}")
         if command.lower() == 'exit':
             # Shutdown the connection on exit
             app.shutdown()
@@ -105,7 +128,6 @@ def shell(app):
             print(output)
         if error:
             Printer.error_response(f"{error}")
-
 
 if __name__ == '__main__':
     app = Cosine_Cassandra()

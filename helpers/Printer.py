@@ -20,6 +20,7 @@ help_text = """
     delete <id> : Removes data stored in DB by id
     web i : Start the web application
     web o : Stop the web application
+    tools : Open toolset for fun extras
     exit : Exit the program
 ---------------------------------------------------
 """
